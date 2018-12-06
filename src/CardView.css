@@ -1,0 +1,7 @@
+img.card {
+  height: inherit;
+}
+
+.card-frame {
+  margin: 2px 2px 2px 2px;
+}
