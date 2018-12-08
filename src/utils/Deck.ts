@@ -9,10 +9,11 @@ const suits = [
 ];
 
 export class Deck implements IDeck {
-  public cardArray: Card[] = [];
-  public current = 0;
+  public cardArray: Card[];
+  public current: number;
 
   constructor() {
+    this.cardArray = [];
     for (let i = 0; i < 52; i++) {
       this.cardArray.push({
         id: i,
@@ -20,10 +21,16 @@ export class Deck implements IDeck {
         rank: Math.floor(i / 4) + 1
       });
     }
+    this.current = 0;
   }
 
   public shuffle() {
-    // TODO impl shuffle
+    const a = this.cardArray;
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    this.current = 0;
   }
 
   /**
@@ -40,13 +47,16 @@ export class Deck implements IDeck {
     return cards;
   }
 
+  /**
+   * get the first five only when it is used
+   */
   public nextFive() {
     // TODO hard code
-    if (this.current === 50) {
+    if (this.current === 52) {
       return null;
     }
     const ahand = this.hand(5);
-    this.current += 5;
+    this.current += ahand.length;
     return ahand;
   }
 
@@ -54,6 +64,11 @@ export class Deck implements IDeck {
     if (this.current === 0) {
       return null;
     }
+
+    if (this.current === 52) {
+      this.current = 50;
+    }
+
     this.current -= 5;
     return this.hand(5);
   }

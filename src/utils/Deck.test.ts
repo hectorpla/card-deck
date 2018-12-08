@@ -52,29 +52,73 @@ describe("test Deck", () => {
     }
   });
 
-  it("test nextFive() and then previousFive()", () => {
+  const roundTraverse = (d: IDeck) => {
     for (let i = 0; i < 10; i++) {
-      const hand = deck.hand(5);
-      deck.nextFive();
+      const hand = d.hand(5);
+      expect(hand).toEqual(d.nextFive());
       expect(hand.length).toBe(5);
       for (let j = 0; j < 5; j++) {
         expect(hand[j].id).toBe(i * 5 + j);
       }
     }
-    const hand = deck.hand(5);
-    expect(hand.length).toBe(2);
-    expect(hand[0].id).toBe(50);
-    expect(hand[1].id).toBe(51);
-    expect(deck.nextFive()).toBe(null);
+
+    const lasthand = d.hand(5);
+    expect(lasthand).toEqual(d.nextFive());
+    expect(lasthand.length).toBe(2);
+    expect(lasthand[0].id).toBe(50);
+    expect(lasthand[1].id).toBe(51);
+    expect(d.nextFive()).toBeNull();
 
     for (let i = 9; i >= 0; i--) {
-      deck.previousFive();
-      const hand = deck.hand(5);
+      const hand = d.previousFive()!;
+      expect(hand).toBeTruthy();
+      expect(hand).toEqual(d.hand(5));
       expect(hand.length).toBe(5);
       for (let j = 0; j < 5; j++) {
         expect(hand[j].id).toBe(i * 5 + j);
       }
     }
-    expect(deck.previousFive()).toBe(null);
+    expect(d.previousFive()).toBeNull();
+  };
+
+  it("nextFive() to the end and then previousFive() to the head", () => {
+    roundTraverse(deck);
+  });
+
+  it("nextFive() and previousFive(), two rounds", () => {
+    roundTraverse(deck);
+    roundTraverse(deck);
+  });
+
+  const shuffleAndTraverse = (d: IDeck) => {
+    d.shuffle();
+    for (let i = 0; i < 10; i++) {
+      const hand = d.nextFive()!;
+      expect(hand.length).toBe(5);
+    }
+
+    const lasthand = d.nextFive()!;
+    expect(lasthand.length).toBe(2);
+    expect(d.nextFive()).toBeNull();
+
+    for (let i = 0; i < 10; i++) {
+      const hand = d.previousFive()!;
+      expect(hand.length).toBe(5);
+    }
+    expect(d.previousFive()).toBeNull();
+  };
+
+  it("shuffle()", () => {
+    shuffleAndTraverse(deck);
+    shuffleAndTraverse(deck);
+  });
+
+  it("shuffle() with nextFive()", () => {
+    deck.nextFive();
+    deck.nextFive();
+    shuffleAndTraverse(deck);
+    deck.nextFive();
+    deck.nextFive();
+    shuffleAndTraverse(deck);
   });
 });
