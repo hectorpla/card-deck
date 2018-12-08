@@ -28,11 +28,7 @@ export const CardView = ({ cardId }: Props) => {
 
   return (
     <div className="card-frame" style={{ height: 200 }}>
-      <img
-        className="card"
-        src={`/PockerCardsImages/${fileName}.png`}
-        alt={fileName}
-      />
+      <img className="card" src={`/images/${fileName}.png`} alt={fileName} />
     </div>
   );
 };

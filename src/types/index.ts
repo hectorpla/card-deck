@@ -3,8 +3,6 @@ import { Suite } from "./constants";
 export interface State {
   deck: IDeck;
   readonly numOut: number;
-  nextFive(): Card[];
-  previousFive(): Card[];
   restart(): void;
 }
 
@@ -12,6 +10,8 @@ export interface IDeck {
   readonly cardArray: Card[];
   shuffle(): void;
   hand(n: number): Card[];
+  nextFive(): Card[] | null;
+  previousFive(): Card[] | null;
 }
 
 export interface Card {
