@@ -11,6 +11,7 @@ const suits = [
 export class Deck implements IDeck {
   public cardArray: Card[];
   public current: number;
+  public opened: boolean; // whether the deck is in pristine state
 
   constructor() {
     this.cardArray = [];
@@ -22,6 +23,7 @@ export class Deck implements IDeck {
       });
     }
     this.current = 0;
+    this.opened = false;
   }
 
   public shuffle() {
@@ -31,6 +33,7 @@ export class Deck implements IDeck {
       [a[i], a[j]] = [a[j], a[i]];
     }
     this.current = 0;
+    this.opened = false;
   }
 
   /**
@@ -52,12 +55,17 @@ export class Deck implements IDeck {
    */
   public nextFive() {
     // TODO hard code
-    if (this.current === 52) {
+    if (this.current === 50) {
       return null;
     }
-    const ahand = this.hand(5);
-    this.current += ahand.length;
-    return ahand;
+
+    // invariant: after handing, the current points to the head of current five
+    if (this.opened) {
+      this.current += 5;
+    } else {
+      this.opened = true;
+    }
+    return this.hand(5);
   }
 
   public previousFive() {
@@ -65,10 +73,7 @@ export class Deck implements IDeck {
       return null;
     }
 
-    if (this.current === 52) {
-      this.current = 50;
-    }
-
+    // invariant: after handing, the current points to the head of current five
     this.current -= 5;
     return this.hand(5);
   }
