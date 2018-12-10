@@ -8,6 +8,7 @@ class App extends React.Component {
   public render() {
     return (
       <div className="App">
+        <h2 className="App-logo">Remember card deck: improve your memory!</h2>
         <CardDeckView deck={new Deck()} />
       </div>
     );

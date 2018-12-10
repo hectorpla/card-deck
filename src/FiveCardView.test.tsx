@@ -14,6 +14,6 @@ const mockCards: Card[] = [
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(<FiveCardView cards={mockCards} />, div);
+  ReactDOM.render(<FiveCardView visible={true} cards={mockCards} />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
